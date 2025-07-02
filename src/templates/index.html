@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Login and Register test
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+
+  <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% if user %}
+      <div class="welcome-message">
+        <h2>Welcome, {{ user.name }}!</h2>
+        <p>You are logged in as {{ user.role }}.</p>
+        <a href="/logout">Logout</a>
+      </div>
+    {% else %}
+      <div class="container">
+        <div class="form-box active" id="login-form">
+          <form action="/login" method="POST">
+            <h2>Login</h2>
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" value="Password" required />
+            <button type="submit">Login</button>
+            <p>
+              If you dont have an account
+              <a href="#" onClick="toggleForm('register-form')"> Register Here</a>
+            </p>
+          </form>
+        </div>
+        <div class="form-box" id="register-form">
+          <form action="/register" method="POST">
+            <h2>Register</h2>
+            <input type="text" name="name" placeholder="Name" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" value="Password" required />
+            <select name="role" required>
+              <option value="">Select Role</option>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+            <button type="submit" name="register">Register</button>
+            <p>
+              If you already have an account
+              <a href="#" onclick="toggleForm('login-form')"> Login Here</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+  </body>
+
+  <script>
+    function toggleForm(formId) {
+      document
+        .querySelectorAll(".form-box")
+        .forEach((form) => form.classList.remove("active"));
+      document.getElementById(formId).classList.add("active");
+    }
+  </script>
+</html>
